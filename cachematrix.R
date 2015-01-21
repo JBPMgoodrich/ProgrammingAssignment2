@@ -1,10 +1,12 @@
-## Put comments here that give an overall description of what your
-## functions do
-
-## Write a short comment describing this function
-
+## R function that caches a potentially time-consuming computations
+## 
+## Cache the value of computation
+## Look up value from cache when needed
+## ?Recompute if the value changes?
+##
+##
 makeCacheMatrix <- function(x = matrix()) {
-
+##
 }
 
 
