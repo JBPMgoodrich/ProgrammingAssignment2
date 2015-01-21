@@ -1,6 +1,6 @@
 ## R function that caches a potentially time-consuming computations
 ## 
-## Cache the value of computation
+## Cache the inverse of a matrix
 ## Look up value from cache when needed
 ## ?Recompute if the value changes?
 ##
