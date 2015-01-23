@@ -4,30 +4,29 @@
 ## 
 ##    Cache the inverse of a matrix
 ##    Look up value from cache when needed
-##    ??? Recompute if the value changes?
 ##
 ##    Patterned after example about mean
 ##
 
 ##
-## Create a "matrix" object that can cache its inverse
+## Constructor for "matrix" object that can cache its inverse
 ##
 makeCacheMatrix <- function(x = matrix()) {
-      ## initialize inverse to avoid error for getinverse 
+      ## initialize local variable inverse to avoid error on some calls to getinverse 
       i<- NULL
       
       ## setters and getters for matrix
       set<- function(y){
             x<<- y
-            i<<- NULL
+            i<<- NULL   ## when setting new value of matrix, its inverse should be "cleared"
       }
       get<- function() x
       
       ## setters and getters for inverse of matrix
-      setinverse<- function(solve) i<<- solve
+      setinverse<- function(inverse) i<<- inverse
       getinverse<- function() i
       
-      ## create the return objection, which is list for "calls"
+      ## create the return object, which is a list of function "calls"
       list( get=get
             ,getinverse=getinverse
             ,set=set
@@ -36,17 +35,17 @@ makeCacheMatrix <- function(x = matrix()) {
 }
 
 ##
-## Calculate inverse of "matrix" object created with function makeCacheMatrix.
+## Calculate inverse of object type "matrix"
 ##
-##    Check if inverse already 
-##      If so, get inverse from cache (skip computation)
-##	  Else, calculate inverse then set using function setinverse
+##    Check if inverse already cached
+##      If so, retrieve (skip computation)
+##	  Else, calculate then set using function setinverse
 ##
 cacheSolve <- function(x, ...) {
       ## Get local copy of i, the  inverse of input matrix object x
       i<- x$getinverse()
       
-      ## If inverse already exists then return it rather than calculate
+      ## If inverse already exists then return it rather than re-calculate
       if( !is.null(i) ){
             message("Getting cached data...")
             return(i)
@@ -57,3 +56,22 @@ cacheSolve <- function(x, ...) {
       x$setinverse(i)
       i
 }
+
+
+## Test Cases
+##
+## Case 1   1x1
+##    matrix<- makeCacheMatrix(1)
+##    cacheSolve(matrix)      ## 1st call caches inverse
+##    cacheSolve(matrix)      ## 2nd call retrieves inverse
+##
+## Case 2   2x2
+##    matrix<- makeCacheMatrix( matrix(1:4 ,nrow=2) )
+##    cacheSolve(matrix)      ## 1st call caches inverse
+##    cacheSolve(matrix)      ## 2nd call retrieves inverse
+##
+## Case 3   3x3   [located solvable 3x3 on internet]
+##    matrix<- makeCacheMatrix( matrix(c(1,0,5,2,1,6,3,4,0) ,nrow=3) )
+##    cacheSolve(matrix)      ## 1st call caches inverse
+##    cacheSolve(matrix)      ## 2nd call retrieves inverse
+
